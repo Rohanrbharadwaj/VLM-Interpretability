@@ -107,3 +107,41 @@ The notebook's automatic verdict, "1 of 4 criteria, DIFFERENT mechanism", is the
 1. Optional follow-up notebook already built: combined MLP+heads ablation in both models (tests the redundancy explanation directly) and a rerun of the analysis; it should also report margin retention (to be added).
 2. Attribute/relation extension (`HALLUC_TYPE`), using Rohan's data for LLaVA.
 3. A like-for-like control (CLIP encoder with the same projector-only recipe) if the encoder-vs-recipe split matters for the write-up.
+
+
+It's real research and presentable as a UGP result, but I wouldn't call it publication-grade yet. The weak points are about design, not polish.
+
+**What's strong**
+- **Tested hypotheses:** you started from a question (encoder-driven vs LM-side), fixed criteria before the LLaVA runs, and reported where they failed.
+- **Sound measurement:**
+  - same questions and code for both models;
+  - image-cluster bootstrap CIs;
+  - random controls for ablations;
+  - shuffled-label probe controls;
+  - the new engine reproducing your old ablation numbers exactly.
+- **Findings that hold up:**
+  - the AUROC-vs-margin issue, where a rank metric hid a large effect;
+  - DLA overstating necessity by about 2×, equally in both models;
+  - threshold-0 hallucination rates misleading when a model is biased;
+  - the text-position K/V route in both models.
+
+**What a reviewer will attack**
+1. **The central confound.** LLaVA's projector and LM were fine-tuned jointly; yours is a projector-only alignment on a frozen 4-bit LM. So "JEPA delivers less information" can't be separated from "our alignment recipe is weaker." Without a controlled comparison, the encoder-vs-LM claim is mostly descriptive. A like-for-like control would fix this, though you said you didn't want one.
+2. **Scope.** Object/POPE only, while the task and project title are about attribute and relation hallucination.
+3. **Post hoc margin analysis.** Your pre-registered criteria gave "DIFFERENT mechanism," and the margin metric reversed M1, M2 and M4. I labelled it as post hoc, and it's well motivated, but it must stay labelled that way. Present both and don't hide the fail.
+4. **Unresolved items:**
+   - Head-level agreement is unresolved because JEPA's attribution is noisy.
+   - LLaVA's noise calibration isn't at chance.
+   - It's a single run on 1000 questions, so each number is one draw.
+5. **Correlational pieces.** The 69/31 split rests on a supervised linear probe, and the "unused information" gap is borderline for LLaVA (lower bound 0.019 against a 0.02 threshold).
+
+**To present it**
+- Lead with 2–3 claims you can defend: same circuit, weaker evidence, the matched-sensitivity result.
+- Put the confound and the post hoc change in the first paragraph, not the end.
+- Use the five figures and the criteria table. The write-up already has the corrected criteria table.
+- Say plainly that attribute/relation is future work.
+
+**What would make it stronger**
+- Rerun the key results on a second seed or a different question subset.
+- Add the like-for-like control, or at least a second projector run with a different seed to bound the recipe's effect.
+- Extend to attribute and relation questions, which is what the task actually asks.
