@@ -1,0 +1,30 @@
+Quite a lot actually. The gate failing is about one specific design choice, not about the direction.
+
+**1. The VLM does combine evidence and prior in a measurable way.**
+This was sub-question 1 and the answer is yes. With counts10, the fit gives $\gamma = 0.277$ [0.233, 0.322]. That interval is clearly away from zero, and it replicated from the 300-trial screen to the 600-trial full run (0.227 → 0.277). It is a stable effect, not noise.
+
+**2. The prior effect is large enough to work with.**
+You were worried earlier that a ~0.3 logit effect would be too small to dissect. Format tuning raised it to about +0.75 logits [0.64, 0.86] with a tight interval. That is a usable signal for patching.
+
+**3. The evidence side is clean.**
+With no history, the model reads the Gabor properly: graded response between ~3% and 12% contrast, with $\beta \approx 15$ and a swing of about 3.4 logits. That is the same kind of psychometric behavior the mouse shows, so the task itself is sound.
+
+**4. The prior behaves like a constant offset (H2, first look).**
+The prior effect is roughly flat across contrast. That is a concrete, testable finding about the form of the combination. It is also the kind of thing that can be compared with mice, since you can check whether the mouse prior is also close to additive or grows at low contrast.
+
+**5. The model uses the recent-history text, as a mouse uses recent trials.**
+The shift tracks the counts in the prompt much better than the true block (R² 0.88 vs 0.62, block slope ≈ 0 once the text is in the regression). So the "prior" in this system is well defined: it is what the model infers from recent trials. That is the same situation as the mouse, which can only infer the block from its recent history.
+
+**6. The prior shows up in the activations early.**
+Block information is decodable by layer ~6 (AUROC 0.82, plateau ~0.87, near the 0.90 ceiling from the counts alone), with the no-history and shuffled controls at ≈0.5. So the control design is working: the signal is real and not a probe artifact. It also tells you roughly where to start patching, namely layers 4–12.
+
+**7. We learned what not to do.**
+We ruled out probability-style priors ("about 80% right"), which push the model to say right every time. We also learned that the way history is phrased changes the prior effect by about 3x. Those are useful methodological findings, and they tell you what to report as a limitation.
+
+**8. The suppression is itself a result.**
+History cutting evidence use by about 45% is a real behavior. It is evidence-prior interference, and it is arguably closer to the hallucination story than the clean case would be: the context competes with the image for the answer. If it can be tied to the POPE setting, that would be one of the more interesting findings.
+
+**9. The pipeline is reusable.**
+The notebook is chunked, checkpointed, seeded and reproducible, and the cached residual streams are on Kaggle. Patching, a different model or a different format is now a rerun and not a rebuild.
+
+So where you actually stand is this: the effect exists, it is measurable, it is internally decodable, and the controls hold. What's left to settle is the confound, and the mouse comparison. Those are the next two steps, not reasons to doubt the direction.
