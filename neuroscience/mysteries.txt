@@ -1,0 +1,33 @@
+Fair question. Here are the negatives, roughly from most to least serious.
+
+**1. The pre-registered gate failed, and I'm still proceeding.**
+We said history must not cut evidence use by more than 30%. It cut it by about 45%, and every format failed. Going forward with counts10 is a post-hoc decision. It's defensible, but it has to be reported as "gate failed, proceeded anyway" and not as a pass.
+
+**2. The prior and evidence interfere, so $\gamma/\beta$ is ambiguous.**
+Because $\beta$ drops when history is present, the contrast-equivalent of the prior is 12% with the suppressed $\beta$ and about 5% with the unsuppressed one. A 2.4x range on the headline number is too wide for a clean mouse comparison.
+
+**3. The "prior" may just be the model reading numbers.**
+The shift is explained by the counts in the text (R² 0.88), and the block itself adds nothing (slope ≈ 0). The probe AUROC (~0.87) is also close to the ceiling from the counts alone (0.90). So the probes may be detecting "the prompt contained a lot of R tokens", not an inferred prior. That is a weaker claim than "the model represents the block prior", and we haven't separated the two.
+
+**4. It's not Bayesian-like.**
+The shift by count is flat for 1–7 right out of 10, then jumps only at 8–10. The model reacts to extreme runs and not to a graded belief. A mouse is closer to graded. So the combination rule may differ in form, not just in strength.
+
+**5. Nothing causal yet.**
+Readable is not used. Everything so far is behavior plus linear probes, so we can't say yet whether those layer-6–10 directions drive the answer.
+
+**6. We have no mouse numbers.**
+The whole premise is the comparison, and the mouse fit hasn't been run. We don't know whether the mouse $\gamma/\beta$ is near our 5–12% or ten times off.
+
+**7. Weak extreme-count statistics.**
+Only 25 trials have 10 of 10 right and 30 have 0 of 10, and those are where the effect concentrates. Estimates there are noisy.
+
+**8. Narrow setup.**
+One model (LLaVA, 4-bit), one stimulus type, one history format that happened to work, and a deterministic readout, so there are no psychometric curves with noise, only step-like ones. $\Delta$ is also not calibrated, so $\gamma = 1$ as a Bayesian reference isn't meaningful.
+
+**9. The hallucination link is still a hypothesis.**
+This in-context prior is not the learned language prior behind POPE. Nothing in the notebook shows they share machinery. That test comes after patching.
+
+**10. Cost of the format hunt.**
+Much of the effort went into finding any format that gave a measurable prior. The 3x format sensitivity means every result is conditional on a prompt wording, which is a limitation any reviewer will raise.
+
+The fixes are not mysterious. Items 3 and 5 are resolved by controls and patching. Item 6 is one notebook. Items 2 and 4 become more defensible if you report both $\beta$ versions and the shape of the count response. Item 1 just needs honest framing.
