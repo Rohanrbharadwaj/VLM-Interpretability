@@ -1,0 +1,51 @@
+FORMAT: counts10 | rows 1200 | trials 600 | median mass {'hist': 0.999, 'none': 0.999}
+
+[A] swing (right - left mean delta, logits) by contrast; ratio = hist / none
+        none  hist  ratio
+0.0300  0.56  0.76   1.35
+0.0450  1.21  0.81   0.66
+0.0625  2.11  1.15   0.54
+0.0900  2.74  1.58   0.58
+0.1250  3.40  1.85   0.54
+1.0000  3.44  1.97   0.57
+blank-image mean delta (side bias b): {'hist': -0.55, 'none': -0.73}
+
+[B] fit delta = b + beta*s + gamma*prior (contrast <= 0.09); 95% bootstrap CI over trials
+  none  b=-0.85  beta=15.0 [14.4,15.6]  gamma=-0.003 [-0.023,+0.021]  (0.2-vs-0.8 gap -> -0.01 logits)
+  hist  b=-0.59  beta=6.3 [5.1,7.5]  gamma=+0.277 [+0.233,+0.322]  (0.2-vs-0.8 gap -> +0.77 logits)
+
+[C] side-matched prior effect (history minus none, block 0.8 minus 0.2): +0.75 logits [+0.64,+0.86]  -> gamma-equivalent +0.270
+ contrast  effect  ci_lo  ci_hi
+     0.00    0.76   0.53   1.01
+     0.03    0.80   0.56   1.13
+     0.04    0.85   0.45   1.20
+     0.06    0.49  -0.40   0.94
+     0.09    0.84   0.50   1.15
+     0.12    0.87   0.56   1.19
+     1.00    0.64   0.47   0.82
+
+[D] gamma/beta (hist) = 0.0439; prior boundary shift for the 0.2-vs-0.8 gap = 12.2% contrast
+    no-history half-swing contrast = 5.5%  -> shift / half-swing contrast = 2.22
+    prior push / full evidence swing (none, 100%) = 0.223
+
+[E] probes at the answer position (AUROC, grouped CV by block; PCA-32 per layer)
+      side_auc      block_auc       block_null
+order     hist none      hist  none       hist
+layer                                         
+0         0.50  0.5      0.50  0.50       0.50
+2         1.00  1.0      0.56  0.56       0.49
+4         1.00  1.0      0.66  0.51       0.48
+6         0.96  1.0      0.82  0.48       0.50
+8         0.97  1.0      0.84  0.52       0.52
+10        0.99  1.0      0.86  0.48       0.50
+12        1.00  1.0      0.87  0.49       0.57
+14        1.00  1.0      0.88  0.54       0.48
+16        1.00  1.0      0.87  0.50       0.50
+18        1.00  1.0      0.86  0.52       0.54
+20        1.00  1.0      0.86  0.52       0.49
+22        1.00  1.0      0.87  0.52       0.41
+24        1.00  1.0      0.88  0.55       0.49
+26        1.00  1.0      0.88  0.57       0.49
+28        1.00  1.0      0.87  0.56       0.42
+30        1.00  1.0      0.87  0.55       0.44
+32        1.00  1.0      0.87  0.51       0.49
